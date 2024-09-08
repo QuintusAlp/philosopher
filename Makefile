@@ -1,11 +1,11 @@
-SRCS = srcs/philosopher.c srcs/ft_error.c srcs/ft_monitoring.c \
+SRCS = srcs/philosopher.c srcs/ft_error.c  \
 		srcs/ft_atoi.c srcs/ft_init.c srcs/ft_routine.c
 OBJDIR = objets
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 INCS = includes
 CC = gcc
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror  
 NAME = philo
 
 GREEN = \033[0;32m
