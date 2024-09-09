@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qalpesse <qalpesse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: qalpesse <qalpesse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 20:15:40 by qalpesse          #+#    #+#             */
-/*   Updated: 2024/09/09 08:27:30 by qalpesse         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:58:19 by qalpesse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philosopher.h"
+#include "./includes/philosopher.h"
 
 int	ft_atoi(const char *str)
 {
@@ -64,7 +64,7 @@ void	ft_print_mutex(int flag, t_philo *philo)
 
 	current_time_value = ft_current_time() - philo->init_timestamp;
 	i = philo->index + 1;
-	if (!philo->dead)
+	if (!ft_philo_is_dead(philo))
 	{
 		pthread_mutex_lock(philo->print_mutex);
 		if (flag == EAT)

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_monitoring.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qalpesse <qalpesse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: qalpesse <qalpesse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 07:42:58 by qalpesse          #+#    #+#             */
-/*   Updated: 2024/09/09 08:48:12 by qalpesse         ###   ########.fr       */
+/*   Updated: 2024/09/09 17:25:31 by qalpesse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philosopher.h"
+#include "./includes/philosopher.h"
 
 int	ft_nbr_full_philo(t_philo *philo)
 {
@@ -23,8 +23,10 @@ int	ft_nbr_full_philo(t_philo *philo)
 	nbr_philo_must_e = philo->number_of_times_each_philosopher_must_eat;
 	while (i < philo->number_of_philosophers)
 	{
+		pthread_mutex_lock(philo[i].eat_mutex);
 		if (philo[i].number_of_meals == nbr_philo_must_e)
 			nbr++;
+		pthread_mutex_unlock(philo[i].eat_mutex);
 		i++;
 	}
 	return (nbr);
@@ -35,12 +37,13 @@ int	ft_check_death(t_philo *philo)
 	size_t	laps_time;
 	size_t	i;
 
+	pthread_mutex_lock(philo->eat_mutex);
 	i = (ft_current_time() - philo->init_timestamp);
 	laps_time = i - philo->last_eating_time;
-	if (laps_time >= philo->time_to_die && !philo->is_eating)
-		return (1);
+	if (!philo->is_eating && laps_time >= philo->time_to_die)
+		return (pthread_mutex_unlock(philo->eat_mutex), 1);
 	else
-		return (0);
+		return (pthread_mutex_unlock(philo->eat_mutex), 0);
 }
 
 void	ft_kill_all_philo(t_philo *philo)
@@ -50,7 +53,9 @@ void	ft_kill_all_philo(t_philo *philo)
 	i = 0;
 	while (i < philo->number_of_philosophers)
 	{
+		pthread_mutex_lock(philo[i].dead_mutex);
 		philo[i].dead = 1;
+		pthread_mutex_unlock(philo[i].dead_mutex);
 		i++;
 	}
 }
@@ -70,11 +75,9 @@ void	*ft_monitoring(void *arg)
 		{
 			if (ft_check_death(&philo[i]))
 			{
-				pthread_mutex_lock(philo->dead_mutex);
 				ft_print_mutex(DEAD, &philo[i]);
 				ft_kill_all_philo(philo);
 				end = 0;
-				pthread_mutex_unlock(philo->dead_mutex);
 				break ;
 			}
 			i++;

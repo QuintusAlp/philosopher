@@ -1,11 +1,11 @@
-SRCS = srcs/philosopher.c srcs/ft_error.c  \
-		srcs/utils.c srcs/ft_init.c srcs/ft_routine.c srcs/ft_monitoring.c
+SRCS = ./philosopher.c ./ft_error.c  \
+		./utils.c ./ft_init.c ./ft_routine.c ./ft_monitoring.c ./ft_init_utils.c
 OBJDIR = objets
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 INCS = includes
 CC = gcc
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror  
+CFLAGS = -Wall -Wextra -Werror -g
 NAME = philo
 
 GREEN = \033[0;32m
@@ -17,7 +17,7 @@ PURPLE=\033[0;35m
 all: titre ${NAME}
 
 $(OBJDIR)/%.o: %.c
-	@mkdir -p $(OBJDIR) $(OBJDIR)/srcs
+	@mkdir -p $(OBJDIR) $(OBJDIR)/philo
 	@${CC} ${CFLAGS} -I ${INCS} -c $< -o $@
 
 ${NAME}: ${OBJS}
