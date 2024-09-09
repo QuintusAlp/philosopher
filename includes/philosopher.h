@@ -6,7 +6,7 @@
 /*   By: qalpesse <qalpesse@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:36:25 by qalpesse          #+#    #+#             */
-/*   Updated: 2024/09/08 12:34:14 by qalpesse         ###   ########.fr       */
+/*   Updated: 2024/09/09 08:09:48 by qalpesse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,7 @@ enum print_flags
 	FORK,
 	THINK,
 };
-//atoi
-int	ft_atoi(const char *str);
+
 //error
 void	ft_error(char *error_message);
 //other
@@ -72,5 +71,16 @@ int	ft_init_mutex(pthread_mutex_t *mutex, t_data *data);
 void	ft_print_mutex(int flag, t_philo *philo);
 int	ft_usleep(size_t milliseconds);
 int	ft_init_deads(t_data *data);
+//monitoring
+int	ft_nbr_full_philo(t_philo *philo);
+int	ft_check_death(t_philo *philo)   ;
+void	ft_kill_all_philo(t_philo *philo);
+void	*ft_monitoring(void *arg);
+void	*ft_monitoring(void *arg);
+//utils
+int	ft_atoi(const char *str);
+size_t	ft_current_time(void);
+int	ft_usleep(size_t milliseconds);
+void	ft_print_mutex(int flag, t_philo *philo);
 
 #endif
