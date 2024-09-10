@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qalpesse <qalpesse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: qalpesse <qalpesse@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 15:11:01 by qalpesse          #+#    #+#             */
-/*   Updated: 2024/09/09 15:58:01 by qalpesse         ###   ########.fr       */
+/*   Updated: 2024/09/10 20:21:27 by qalpesse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-void	ft_error(char *error_message)
+int	ft_error(char *error_message)
 {
 	write (2, error_message, ft_strlen(error_message));
+	return (1);
 }

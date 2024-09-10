@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_init_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qalpesse <qalpesse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: qalpesse <qalpesse@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:40:39 by qalpesse          #+#    #+#             */
-/*   Updated: 2024/09/09 15:58:06 by qalpesse         ###   ########.fr       */
+/*   Updated: 2024/09/10 20:36:41 by qalpesse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	ft_init_malloc_mutex(pthread_mutex_t *mutexs, t_data *data)
 	int	i;
 
 	i = 0;
-	while (i < data->number_of_philosophers)
+	while (i < data->nbr_philo)
 	{
 		if (pthread_mutex_init(&mutexs[i], NULL))
 			return (ft_destroy(mutexs, i), 1);

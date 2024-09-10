@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qalpesse <qalpesse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: qalpesse <qalpesse@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:29:57 by qalpesse          #+#    #+#             */
-/*   Updated: 2024/09/09 17:24:13 by qalpesse         ###   ########.fr       */
+/*   Updated: 2024/09/10 21:23:14 by qalpesse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int	ft_parsing(int argc, char **argv, t_data *data)
 {
 	if (argc != 6 && argc != 5)
 		return (ft_error("wrong number of args\n"), 1);
-	data->number_of_philosophers = ft_atoi(argv[1]);
-	if (data->number_of_philosophers < 2)
+	data->nbr_philo = ft_atoi(argv[1]);
+	if (data->nbr_philo < 1)
 		return (ft_error("wrong number of philosophers\n"), 1);
 	data->time_to_die = ft_atoi(argv[2]);
 	if (data->time_to_die < 1)
@@ -45,7 +45,7 @@ void	ft_destroy_all(t_data *data, t_philo *philo)
 	int	i;
 
 	i = 0;
-	while (i < data->number_of_philosophers)
+	while (i < data->nbr_philo)
 	{
 		pthread_mutex_destroy(&data->eat_mutex[i]);
 		pthread_mutex_destroy(&data->forks[i]);
@@ -55,29 +55,24 @@ void	ft_destroy_all(t_data *data, t_philo *philo)
 	pthread_mutex_destroy(philo->dead_mutex);
 	pthread_mutex_destroy(philo->print_mutex);
 }
-
 int	main(int argc, char **argv)
 {
 	t_data			data;
-	t_philo			*philosophers;
-	pthread_t		*threads;
 
 	if (ft_parsing(argc, argv, &data))
 		return (1);
-	philosophers = malloc(data.number_of_philosophers * sizeof(t_philo));
-	if (!philosophers)
-		return (ft_error("malloc erro\n"), 1);
-	threads = malloc(data.number_of_philosophers * sizeof(pthread_t));
-	if (!threads)
-		return (free(philosophers), ft_error("malloc error\n"), 1);
+	if (ft_malloc_all(&data))
+		return (ft_free_all(&data), 1);
 	if (ft_init_mutex(&data))
-		return (free(philosophers),
-			free(threads),
-			ft_error("malloc error\n"), 1);
-	ft_init_philosophers(philosophers, &data);
-	if (ft_start_routines(threads, philosophers))
-		return (1);
-	ft_destroy_all(&data, philosophers);
-	return (free(philosophers), free(data.forks),
-		free(data.dead_mutex), free(data.eat_mutex), free(threads), 0);
+		return(ft_free_all(&data),ft_error("mutex init issue"));
+	ft_init_philosophers(data.philosophers, &data);
+	if (ft_start_routines(data.threads, data.philosophers))
+	{
+		ft_free_all(&data);
+		ft_destroy_all(&data, data.philosophers);
+	 	return (1);
+	}
+	ft_free_all(&data);
+	ft_destroy_all(&data, data.philosophers);
+	return (0);
 }

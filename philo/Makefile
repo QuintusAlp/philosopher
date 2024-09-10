@@ -1,5 +1,5 @@
 SRCS = ./philosopher.c ./ft_error.c  \
-		./utils.c ./ft_init.c ./ft_routine.c ./ft_monitoring.c ./ft_init_utils.c
+		./utils.c ./ft_init.c ./ft_routine.c ./ft_monitoring.c ./ft_init_utils.c ./malloc_management.c
 OBJDIR = objets
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 INCS = includes
