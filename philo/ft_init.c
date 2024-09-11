@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_init.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qalpesse <qalpesse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: qalpesse <qalpesse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 18:50:09 by qalpesse          #+#    #+#             */
-/*   Updated: 2024/09/10 21:13:15 by qalpesse         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:27:57 by qalpesse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,14 @@ void	philo_add(t_philo *philosophers, t_data *data, int i, int ntpm)
 	philosophers[i].time_to_sleep = data->time_to_sleep;
 	philosophers[i].time_to_die = data->time_to_die;
 	philosophers[i].number_of_philosophers = data->nbr_philo;
-	philosophers[i].number_of_times_each_philosopher_must_eat = ntpm;
-	philosophers[i].number_of_meals = 0;
+	philosophers[i].nbr_each_philo_must_eat = ntpm;
+	philosophers[i].nbr_meals = 0;
 	philosophers[i].l_fork = &data->forks[i];
-	philosophers[i].r_fork
-		= &data->forks[(i + 1) % data->nbr_philo];
+	philosophers[i].r_fork = &data->forks[(i + 1) % data->nbr_philo];
 	philosophers[i].last_eating_time = current_time;
 	philosophers[i].print_mutex = &data->print_mutex;
 	philosophers[i].dead_mutex = &data->dead_mutex[i];
 	philosophers[i].eat_mutex = &data->eat_mutex[i];
-	philosophers[i].is_eating = 0;
 }
 
 void	ft_init_philosophers(t_philo *philosophers, t_data *data)
@@ -61,7 +59,7 @@ void	ft_init_philosophers(t_philo *philosophers, t_data *data)
 	int		ntpm;
 
 	i = -1;
-	ntpm = data->number_of_times_each_philosopher_must_eat;
+	ntpm = data->nbr_each_philo_must_eat;
 	while (i++, i < data->nbr_philo)
 	{
 		philo_add(philosophers, data, i, ntpm);

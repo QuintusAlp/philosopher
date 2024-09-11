@@ -6,7 +6,7 @@
 /*   By: qalpesse <qalpesse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 20:15:40 by qalpesse          #+#    #+#             */
-/*   Updated: 2024/09/09 15:58:19 by qalpesse         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:31:14 by qalpesse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,13 @@ void	ft_print_mutex(int flag, t_philo *philo)
 		pthread_mutex_unlock(philo->print_mutex);
 	}
 	return ;
+}
+
+void	ft_one_philo(t_data *data)
+{
+	size_t	current_time_value;
+
+	ft_usleep(data->time_to_die);
+	current_time_value = ft_current_time() - data->init_timestamp;
+	printf("\033[31m%zu %d died...\033[0m\n", current_time_value, 1);
 }

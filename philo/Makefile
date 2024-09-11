@@ -1,11 +1,13 @@
 SRCS = ./philosopher.c ./ft_error.c  \
-		./utils.c ./ft_init.c ./ft_routine.c ./ft_monitoring.c ./ft_init_utils.c ./malloc_management.c
+		./utils.c ./ft_init.c ./ft_routine.c \
+		./ft_monitoring.c ./ft_init_utils.c ./malloc_management.c \
+		./actions.c
 OBJDIR = objets
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 INCS = includes
 CC = gcc
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -fsanitize=thread -g
 NAME = philo
 
 GREEN = \033[0;32m

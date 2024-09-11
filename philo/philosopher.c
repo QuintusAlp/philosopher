@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qalpesse <qalpesse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: qalpesse <qalpesse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:29:57 by qalpesse          #+#    #+#             */
-/*   Updated: 2024/09/10 21:23:14 by qalpesse         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:30:24 by qalpesse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ int	ft_parsing(int argc, char **argv, t_data *data)
 	if (data->time_to_sleep < 1)
 		return (ft_error("wrong time to sleep\n"), 1);
 	if (argc == 5)
-		data->number_of_times_each_philosopher_must_eat = -1;
+		data->nbr_each_philo_must_eat = -1;
 	else
 	{
-		data->number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
-		if (data->number_of_times_each_philosopher_must_eat < 1)
+		data->nbr_each_philo_must_eat = ft_atoi(argv[5]);
+		if (data->nbr_each_philo_must_eat < 1)
 			return (ft_error("wrong number each philosopher must eat\n"), 1);
 	}
 	data->init_timestamp = ft_current_time();
@@ -55,22 +55,25 @@ void	ft_destroy_all(t_data *data, t_philo *philo)
 	pthread_mutex_destroy(philo->dead_mutex);
 	pthread_mutex_destroy(philo->print_mutex);
 }
+
 int	main(int argc, char **argv)
 {
 	t_data			data;
 
 	if (ft_parsing(argc, argv, &data))
 		return (1);
+	if (data.nbr_philo == 1)
+		return (ft_one_philo(&data), 0);
 	if (ft_malloc_all(&data))
 		return (ft_free_all(&data), 1);
 	if (ft_init_mutex(&data))
-		return(ft_free_all(&data),ft_error("mutex init issue"));
+		return (ft_free_all(&data), ft_error("mutex init issue"));
 	ft_init_philosophers(data.philosophers, &data);
 	if (ft_start_routines(data.threads, data.philosophers))
 	{
 		ft_free_all(&data);
 		ft_destroy_all(&data, data.philosophers);
-	 	return (1);
+		return (1);
 	}
 	ft_free_all(&data);
 	ft_destroy_all(&data, data.philosophers);

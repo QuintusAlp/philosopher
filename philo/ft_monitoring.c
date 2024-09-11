@@ -6,7 +6,7 @@
 /*   By: qalpesse <qalpesse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 07:42:58 by qalpesse          #+#    #+#             */
-/*   Updated: 2024/09/09 17:25:31 by qalpesse         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:18:58 by qalpesse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,14 @@
 int	ft_nbr_full_philo(t_philo *philo)
 {
 	int	i;
-	int	nbr_philo_must_e;
 	int	nbr;
 
 	i = 0;
 	nbr = 0;
-	nbr_philo_must_e = philo->number_of_times_each_philosopher_must_eat;
 	while (i < philo->number_of_philosophers)
 	{
 		pthread_mutex_lock(philo[i].eat_mutex);
-		if (philo[i].number_of_meals == nbr_philo_must_e)
+		if (philo[i].nbr_meals == philo->nbr_each_philo_must_eat)
 			nbr++;
 		pthread_mutex_unlock(philo[i].eat_mutex);
 		i++;
@@ -35,12 +33,12 @@ int	ft_nbr_full_philo(t_philo *philo)
 int	ft_check_death(t_philo *philo)
 {
 	size_t	laps_time;
-	size_t	i;
+	size_t	relative_time;
 
 	pthread_mutex_lock(philo->eat_mutex);
-	i = (ft_current_time() - philo->init_timestamp);
-	laps_time = i - philo->last_eating_time;
-	if (!philo->is_eating && laps_time >= philo->time_to_die)
+	relative_time = (ft_current_time() - philo->init_timestamp);
+	laps_time = relative_time - philo->last_eating_time;
+	if (laps_time >= philo->time_to_die)
 		return (pthread_mutex_unlock(philo->eat_mutex), 1);
 	else
 		return (pthread_mutex_unlock(philo->eat_mutex), 0);

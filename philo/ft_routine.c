@@ -6,7 +6,7 @@
 /*   By: qalpesse <qalpesse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 20:03:59 by qalpesse          #+#    #+#             */
-/*   Updated: 2024/09/09 15:58:14 by qalpesse         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:34:02 by qalpesse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,42 +21,18 @@ int	ft_philo_is_dead(t_philo *philo)
 		return (pthread_mutex_unlock(philo->dead_mutex), 0);
 }
 
-void	ft_eat(t_philo *philo)
-{
-	pthread_mutex_lock(philo->l_fork);
-	pthread_mutex_lock(philo->r_fork);
-	ft_print_mutex(FORK, philo);
-	ft_print_mutex(FORK, philo);
-	pthread_mutex_lock(philo->eat_mutex);
-	philo->is_eating = 1;
-	pthread_mutex_unlock(philo->eat_mutex);
-	ft_print_mutex(EAT, philo);
-	ft_usleep(philo->time_to_eat);
-	pthread_mutex_lock(philo->eat_mutex);
-	philo->number_of_meals += 1;
-	philo->last_eating_time = ft_current_time() - philo->init_timestamp;
-	philo->is_eating = 0;
-	pthread_mutex_unlock(philo->eat_mutex);
-	pthread_mutex_unlock(philo->l_fork);
-	pthread_mutex_unlock(philo->r_fork);
-}
-
 void	*routine(void *arg)
 {
 	t_philo	*philo;
-	int		ntpme;
 
 	philo = (t_philo *) arg;
-	ntpme = philo->number_of_times_each_philosopher_must_eat;
 	while (!ft_philo_is_dead(philo))
 	{
 		ft_eat(philo);
-		if (philo->number_of_meals == ntpme)
+		if (philo->nbr_meals >= philo->nbr_each_philo_must_eat)
 			break ;
-		ft_print_mutex(SLEEP, philo);
-		if (!ft_philo_is_dead(philo))
-			ft_usleep(philo->time_to_sleep);
-		ft_print_mutex(THINK, philo);
+		ft_sleep(philo);
+		ft_think(philo);
 	}
 	return (NULL);
 }
@@ -69,6 +45,8 @@ int	ft_start_routines(pthread_t *threads, t_philo *philo)
 	i = 0;
 	while (i < philo->number_of_philosophers)
 	{
+		if (!((i + 1) % 2))
+			ft_usleep(5);
 		if (pthread_create(&threads[i], NULL, routine, &philo[i]))
 			return (ft_error("failed to create thread\n"), 1);
 		i++;
